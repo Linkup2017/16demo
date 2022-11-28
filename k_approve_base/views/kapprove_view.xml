@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="utf-8" ?>
-<odoo>
-    <data>
-        <menuitem id="menu_kapproval" name="Approvals" web_icon="k_approve_base,static/description/icon.png"/>
-
-        <menuitem id="menu_approval_config" sequence="4" name="Configuration" parent="menu_kapproval" groups="k_approve_base.kapproval_group_manager"/>
-    </data>
-</odoo>
