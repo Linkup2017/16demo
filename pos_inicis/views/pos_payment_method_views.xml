@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="pos_payment_method_view_form_inherit_pos_inicis" model="ir.ui.view">
+        <field name="name">pos.payment.method.form.inherit.inicis</field>
+        <field name="model">pos.payment.method</field>
+        <field name="inherit_id" ref="point_of_sale.pos_payment_method_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='use_payment_terminal']" position="after">
+                <field name="inicis_tcode" attrs="{'invisible': [('use_payment_terminal', '!=', 'inicis')], 'required': [('use_payment_terminal', '=', 'inicis')]}"/>
+                <field name="inicis_tid" attrs="{'invisible': [('use_payment_terminal', '!=', 'inicis')], 'required': [('use_payment_terminal', '=', 'inicis')]}"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

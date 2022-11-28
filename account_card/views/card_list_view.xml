@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="account_card_view_tree" model="ir.ui.view">
+        <field name="name">account_card_tree_view</field>
+        <field name="model">account.card</field>
+        <field name="arch" type="xml">
+            <tree>
+<!--                <header>-->
+<!--                    <button name="action_import_receipt_item" class="oe_highlight"  type="object" string="Import receipt"-->
+<!--                            attrs="{'always_visible': True}"/>-->
+<!--                </header>-->
+                <field name="name"/>
+                <field name="card_no"/>
+                <field name="backup_card_no" invisible="1"/>
+                <field name="card_nk_name"/>
+                <field name="card_state"/>
+                <field name="employee_id"/>
+                <field name="company_id"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="account_card_view_form" model="ir.ui.view">
+        <field name="name">Account Card</field>
+        <field name="model">account.card</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="check_card" class="oe_highlight"  type="object" string="Connect"
+                    attrs="{'invisible': [('card_state', '=', 'normal')]}"/>
+                    <button name="unconnect_button" class="oe_highlight"  type="object" string="Unconnect"
+                    attrs="{'invisible': [('card_state', '!=', 'normal')]}"/>
+
+
+                </header>
+
+                <sheet>
+                     <div class="oe_button_box" name="button_box">
+                         <button name="move_import_receipt" class="oe_stat_button" icon="fa-file-text-o" type="object" string="Receipt"/>
+
+                     </div>
+                    <widget name="web_ribbon" title="카드연동 확인" bg_color="bg-success" attrs="{'invisible': [ ('card_state', '!=', 'normal')]}"/>
+
+                    <group string="Card Status" name="card_status">
+                        <group>
+                            <field name="name" string="Card Bank code"/>
+                            <field name="card_no" string="Card number"/>
+                            <field name="backup_card_no" invisible="1"/>
+                            <field name="card_nk_name" string="Card nick name"/>
+                            <field name="employee_id" string="Employee"/>
+
+                        </group>
+                        <group>
+                            <field name="responsible_id" string="Responsible"/>
+                            <field name="card_state" string="Card State"/>
+                            <field name="company_id" string="Company name"/>
+                        </group>
+                        <group>
+                            <field name="note" invisible="1"/>
+                        </group>
+                    </group>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+
+    <record id="move_card_list" model="ir.actions.act_window">
+       <field name="name">Move Account Card List</field>
+        <field name="type">ir.actions.act_window</field>
+       <field name="res_model">account.card</field>
+       <field name="view_mode">tree,form</field>
+    </record>
+
+
+<!--     <menuitem name="Account Configuration" id="account_card_menu" action="move_card_list" parent="account.menu_finance"/>-->
+
+     <menuitem id="action_account_card_form_menu" name="Card"
+           action="move_card_list" parent="account_card.card_menu_action" sequence="0"/>
+
+
+    <record model="ir.actions.server" id="action_card_search">
+       <field name="name">Card Import</field>
+       <field name="model_id" ref="model_account_card"/>
+       <field name="binding_model_id" ref="model_account_card"/>
+       <field name="state">code</field>
+       <field name="code">
+           action = records.action_card_search()
+       </field>
+   </record>
+
+</odoo>

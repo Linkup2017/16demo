@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <data>
+        <record id="kapproval_retention_action" model="ir.actions.act_window">
+            <field name="name">Retention</field>
+            <field name="res_model">kapprove.retention</field>
+            <field name="view_mode">tree</field>
+            <field name="domain">[]</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">Create The First Retention
+                </p>
+            </field>
+        </record>
+        <record id="k_approval_retention_tree_view" model="ir.ui.view">
+            <field name="name">k_approval.retention.view.tree</field>
+            <field name="model">kapprove.retention</field>
+            <field name="arch" type="xml">
+                <tree string="Retention" editable="bottom">
+                    <field name="name"/>
+                    <field name="period"/>
+                    <field name="date_period"/>
+                    <field name="permanent"/>
+                </tree>
+            </field>
+        </record>
+
+        <menuitem id="k_approval_retention" sequence="6" name="Retention Period" parent="menu_approval_config"
+                  action="kapproval_retention_action"/>
+
+
+    </data>
+</odoo>

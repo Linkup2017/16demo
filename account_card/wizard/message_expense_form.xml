@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+
+ <record id="check_response_form" model="ir.ui.view">
+        <field name="name">Check Response Form</field>
+        <field name="model">bizplay.check</field>
+        <field name="arch" type="xml">
+            <form string="create_expnse_report_form">
+                <sheet>
+                    <group>
+                        <div class="text-muted">
+                                    Connect Successfully !
+                        </div>
+
+<!--                        <field name="check_connect"/>-->
+<!--                        <field name="check_failed"/>-->
+                    </group>
+   	            <footer>
+                    <button string="OK" special="cancel" class="oe_highlight"/>
+                </footer>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="check_response_form_wizard" model="ir.actions.act_window">
+        <field name="name">Check Popup</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">bizplay.check</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="check_response_form"/>
+        <field name="target">new</field>
+    </record>
+
+</odoo>
+
+
+
+

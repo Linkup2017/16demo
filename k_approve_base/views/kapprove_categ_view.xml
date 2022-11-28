@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <record id="kapproval_categ_action" model="ir.actions.act_window">
+        <field name="name">Category</field>
+        <field name="res_model">kapprove.category</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[]</field>
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_create">Create The First Category
+            </p>
+        </field>
+    </record>
+
+    <record id="id_k_approval_category_form_view" model="ir.ui.view">
+        <field name="name">k_approval.category.view.form</field>
+        <field name="model">kapprove.category</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="parent_id"/>
+                        </group>
+                    </group>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>
+
+            </form>
+        </field>
+    </record>
+
+    <record id="id_k_approval_category_tree_view" model="ir.ui.view">
+        <field name="name">k_approval.category.view.tree</field>
+        <field name="model">kapprove.category</field>
+        <field name="arch" type="xml">
+            <tree string="Category">
+                <field name="sequence" widget="handle"/>
+                <field name="display_name"/>
+            </tree>
+        </field>
+    </record>
+
+   <!-- <menuitem id="k_approval_category" sequence="4" name="Category" parent="menu_approval_config"
+              action="kapproval_categ_action"/> -->
+</odoo>

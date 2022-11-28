@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="base.kr" model="res.country">
+        <field name="address_format" eval="'%(country_name)s\n%(zip)s\n%(k_address1)s\n%(street2)s'"/>
+    </record>
+</odoo>

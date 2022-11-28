@@ -1,0 +1,278 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <data>
+        <record id="action_kapproval_template" model="ir.actions.act_window">
+            <field name="name">Template</field>
+            <field name="res_model">kapprove.doc.template</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">Create The First Template
+                </p>
+            </field>
+        </record>
+        <record id="kapproval_doc_type_action" model="ir.actions.act_window">
+            <field name="name">Template Type</field>
+            <field name="res_model">kapprove.template.type</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[]</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">Create The First Template Type
+                </p>
+            </field>
+        </record>
+
+        <record id="id_k_approval_template_type_form_view" model="ir.ui.view">
+            <field name="name">k_approval.template.type.view.form</field>
+            <field name="model">kapprove.template.type</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="name" string="Template Type" placeholder="Template Type"/>
+                            </group>
+                        </group>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+
+                </form>
+            </field>
+        </record>
+
+        <record id="id_k_approval_template_form_view" model="ir.ui.view">
+            <field name="name">k_approval.template.view.form</field>
+            <field name="model">kapprove.doc.template</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <widget name="web_ribbon" title="Archived" bg_color="bg-danger"
+                                attrs="{'invisible': [('active', '=', True)]}"/>
+
+                        <field name="image" widget="image" class="oe_avatar" options='{"preview_image": "image", "size": [80, 80]}'/>
+                        <div class="oe_title">
+                            <label for="doc_name" class="oe_edit_only"/>
+                            <h1>
+                                <field name="doc_name" placeholder="Approvals Type Name"/>
+                            </h1>
+                        </div>
+
+                        <group>
+                            <group>
+                                <field name="period"/>
+                                <field name="secret"/>
+                                <field name="priority" widget="priority"/>
+                                <field name="template_type"/>
+                            </group>
+                            <group>
+                               <!--  <field name="categ_id"/> -->
+                                <field name="tag_ids" widget="many2many_tags" options="{'color_field': 'color'}"/>
+                                <field name="active" invisible="1"/>
+                                <field name="users" widget="many2many_tags" invisible="1"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="Options" name="options">
+                                    <group string="Fields" name="option_settings" >
+                                        <field name="active" invisible="1"/>
+
+                                        <label for="has_purpose" string="String1" />
+                                        <div class="address_format">
+                                             <field name="has_purpose"  widget="radio" options="{'horizontal': true}" style="width: 40%" />
+                                             <field name="str_has_purpose"  attrs="{'invisible': [('has_purpose', '=', 'no')]}" style="width: 25%" />
+                                             <field name="number_has_purpose"  attrs="{'invisible': [('has_purpose', '=', 'no')]}" style="width: 10%" />
+                                             <field name="side_has_purpose"   attrs="{'invisible': [('has_purpose', '=', 'no')]}"   style="width: 25%" />
+                                        </div>
+
+
+                                        <label for="has_partner" string="Contact info" />
+                                        <div class="address_format">
+                                             <field name="has_partner"  widget="radio" options="{'horizontal': true}" style="width: 40%" />
+                                             <field name="str_has_partner" attrs="{'invisible': [('has_partner', '=', 'no')]}" style="width: 25%" />
+                                             <field name="number_has_partner"  attrs="{'invisible': [('has_partner', '=', 'no')]}" style="width: 10%" />
+                                             <field name="side_has_partner"   attrs="{'invisible': [('has_partner', '=', 'no')]}"  style="width: 25%" />
+                                        </div>
+                                        <label for="has_partners" string="Contact infos" />
+                                        <div class="address_format">
+                                             <field name="has_partners"  widget="radio" options="{'horizontal': true}" style="width: 40%" />
+                                             <field name="str_has_partners" attrs="{'invisible': [('has_partners', '=', 'no')]}" style="width: 25%" />
+                                             <field name="number_has_partners"  attrs="{'invisible': [('has_partners', '=', 'no')]}" style="width: 10%" />
+                                             <field name="side_has_partners"   attrs="{'invisible': [('has_partners', '=', 'no')]}"  style="width: 25%" />
+                                        </div>
+
+                                        <label for="has_date" string="Date" />
+                                        <div class="address_format">
+                                             <field name="has_date" widget="radio"  options="{'horizontal': true}" style="width: 40%" />
+                                             <field name="str_has_date" attrs="{'invisible': [('has_date', '=', 'no')]}" style="width: 25%" />
+                                             <field name="number_has_date"  attrs="{'invisible': [('has_date', '=', 'no')]}" style="width: 10%" />
+                                             <field name="side_has_date"   attrs="{'invisible': [('has_date', '=', 'no')]}"  style="width: 25%" />
+                                        </div>
+
+                                        <label for="has_period" string="Period" />
+                                        <div class="address_format">
+                                             <field name="has_period" widget="radio" options="{'horizontal': true}" style="width: 40%" />
+                                             <field name="str_has_period"  attrs="{'invisible': [('has_period', '=', 'no')]}" style="width: 25%" />
+                                             <field name="number_has_period"  attrs="{'invisible': [('has_period', '=', 'no')]}" style="width: 10%" />
+                                             <field name="side_has_period"   attrs="{'invisible': [('has_period', '=', 'no')]}"  style="width: 25%" />
+                                        </div>
+
+                                        <label for="has_reference" string="String2" />
+                                        <div class="address_format">
+                                             <field name="has_reference" widget="radio" options="{'horizontal': true}" style="width: 40%" />
+                                             <field name="str_has_reference" attrs="{'invisible': [('has_reference', '=', 'no')]}"  style="width: 25%" />
+                                             <field name="number_has_reference" attrs="{'invisible': [('has_reference', '=', 'no')]}"  style="width: 10%" />
+                                             <field name="side_has_reference"   attrs="{'invisible': [('has_reference', '=', 'no')]}"  style="width: 25%" />
+                                        </div>
+                                        <!--
+                                        <label for="has_payment_method" string="Payment Method" />
+                                        <div class="address_format">
+                                             <field name="has_payment_method"  widget="radio" options="{'horizontal': true}" style="width: 40%" />
+                                             <field name="str_has_payment_method" attrs="{'invisible': [('has_payment_method', '=', 'no')]}" style="width: 25%" />
+                                             <field name="number_has_payment_method" attrs="{'invisible': [('has_payment_method', '=', 'no')]}" style="width: 10%" />
+                                             <field name="side_has_payment_method"   attrs="{'invisible': [('has_payment_method', '=', 'no')]}"  style="width: 25%" />
+                                        </div>
+                                        -->
+
+                                        <label for="has_location" string="String3" />
+                                        <div class="address_format">
+                                             <field name="has_location" widget="radio" options="{'horizontal': true}" style="width: 40%" />
+                                             <field name="str_has_location" style="width: 25%" attrs="{'invisible': [('has_location', '=', 'no')]}"/>
+                                             <field name="number_has_location" style="width: 10%" attrs="{'invisible': [('has_location', '=', 'no')]}"/>
+                                             <field name="side_has_location"   attrs="{'invisible': [('has_location', '=', 'no')]}"  style="width: 25%" />
+                                        </div>
+                                        <label for="has_totalamount" string="Amount" />
+                                        <div class="address_format">
+                                             <field name="has_totalamount" widget="radio" options="{'horizontal': true}" style="width: 40%" />
+                                             <field name="str_has_totalamount" style="width: 25%" attrs="{'invisible': [('has_totalamount', '=', 'no')]}"/>
+                                             <field name="number_has_totalamount" style="width: 10%" attrs="{'invisible': [('has_totalamount', '=', 'no')]}"/>
+                                             <field name="side_has_totalamount"   attrs="{'invisible': [('has_totalamount', '=', 'no')]}"  style="width: 25%" />
+                                        </div>
+                                    </group>
+                                    <group string="Product Fields" name="option_settings" >
+                                        <label for="has_product" string="Product" />
+                                        <div class="address_format">
+                                             <field name="has_product"  widget="radio"   options="{'horizontal': true}" style="width: 40%" />
+                                             <field name="str_has_product"  attrs="{'invisible': [('has_product', '=', 'no')]}" style="width: 25%" />
+                                             <field name="number_has_product"  attrs="{'invisible': [('has_product', '=', 'no')]}" style="width: 10%" />
+                                             <field name="side_has_product"   attrs="{'invisible': True}"  style="width: 25%" />
+                                        </div>
+
+                                        <label for="has_description" string="Description"  attrs="{'invisible': [('has_product', '=', 'no')]}" />
+                                        <div class="address_format" attrs="{'invisible': [('has_product', '=', 'no')]}" >
+                                             <field name="has_description"  widget="radio"   options="{'horizontal': true}" style="width: 40%" />
+                                             <field name="str_has_description"  attrs="{'invisible': [('has_description', '=', 'no')]}" style="width: 25%" />
+                                             <field name="number_has_description"  attrs="{'invisible': [('has_description', '=', 'no')]}" style="width: 10%" />
+                                             <field name="side_has_description"   attrs="{'invisible': True}"   style="width: 25%" />
+                                        </div>
+
+                                        <label for="has_quantity" string="Quantity" attrs="{'invisible': [('has_product', '=', 'no')]}"/>
+                                        <div class="address_format" attrs="{'invisible': [('has_product', '=', 'no')]}">
+                                             <field name="has_quantity" widget="radio" options="{'horizontal': true}" style="width: 40%" />
+                                             <field name="str_has_quantity"  attrs="{'invisible': [('has_quantity', '=', 'no')]}" style="width: 25%" />
+                                             <field name="number_has_quantity"  attrs="{'invisible': [('has_quantity', '=', 'no')]}" style="width: 10%" />
+                                             <field name="side_has_quantity"   attrs="{'invisible': True}"    style="width: 25%" />
+                                        </div>
+
+                                        <label for="has_amount" string="Amount" attrs="{'invisible': [('has_product', '=', 'no')]}"/>
+                                        <div class="address_format" attrs="{'invisible': [('has_product', '=', 'no')]}">
+                                             <field name="has_amount" widget="radio" options="{'horizontal': true}" style="width: 40%" />
+                                             <field name="str_has_amount"  attrs="{'invisible': [('has_amount', '=', 'no')]}" style="width: 25%" />
+                                             <field name="number_has_amount"  attrs="{'invisible': [('has_amount', '=', 'no')]}" style="width: 10%" />
+                                             <field name="side_has_amount"   attrs="{'invisible': True}"   style="width: 25%" />
+                                        </div>
+                                    </group>
+
+                            </page>
+                            <page string="내용" name="detail">
+                                <field name="detail" string ="내용"/>
+                            </page>
+
+                        </notebook>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+
+                </form>
+            </field>
+        </record>
+
+        <record id="view_kapproval_doc" model="ir.ui.view">
+            <field name="name">k_approval.template.view.tree</field>
+            <field name="model">kapprove.doc.template</field>
+            <field name="arch" type="xml">
+                <tree string="Template Name">
+                    <field name="doc_name"/>
+                    <field name="active"/>
+                    <field name="template_type"/>
+                    <!--<field name="categ_id"/>-->
+                    <field name="tag_ids" widget="many2many_tags" options="{'color_field': 'color'}"/>
+                    <field name="period"/>
+                </tree>
+            </field>
+        </record>
+
+        <menuitem id="k_approval_template" sequence="3" name="Template" parent="menu_approval_config"
+                  action="action_kapproval_template"/>
+        <menuitem id="k_approval_template_type" sequence="2" name="Template Type" parent="menu_approval_config"
+                  action="kapproval_doc_type_action"/>
+
+        <record id="approval_template_view_kanban" model="ir.ui.view">
+            <field name="name">kapprove.doc.template.views.kanban</field>
+            <field name="model">kapprove.doc.template</field>
+            <field name="arch" type="xml">
+                <kanban create="false" class="o_modules_kanban">
+                    <field name="doc_name"/>
+                    <field name="id"/>
+                    <field name="image"/>
+                    <templates>
+                        <t t-name="kanban-box">
+                            <div class="oe_module_vignette">
+                                <t t-if="record.id">
+                                    <img t-att-src="kanban_image('kapprove.doc.template', 'image', record.id.raw_value)" alt="Approvals Types Image"
+                                        class="oe_kanban_avatar float-left mr-3" width="64" height="64"/>
+                                </t>
+                                <div class="oe_module_desc">
+                                    <h4 class="o_kanban_record_title">
+                                        <field name="doc_name"/>
+                                    </h4>
+                                    <div class="oe_module_action" t-if="!selection_mode">
+                                        <button type="object" class="btn btn-primary btn-sm" name="create_document" context="{'template_id':'active_id'}">New Document</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </t>
+                    </templates>
+                </kanban>
+            </field>
+        </record>
+
+        <record id="search_approve_type" model="ir.ui.view">
+            <field name="name">approve.kanban.search</field>
+            <field name="model">kapprove.doc.template</field>
+            <field name="arch" type="xml">
+                <search string="Approval Template Type">
+                   <field name="template_type" />
+                   <group string="Group By" >
+                       <filter string="Template Type" name="group_by_template" domain="[]" context="{'group_by': 'template_type'}"/>
+                   </group>
+                </search>
+            </field>
+        </record>
+
+
+        <record id="approval_template_action_new_request" model="ir.actions.act_window">
+            <field name="name">New Document</field>
+            <field name="res_model">kapprove.doc.template</field>
+            <field name="view_mode">kanban,tree,form</field>
+            <field name="domain">[]</field>
+            <field name="view_id" ref="approval_template_view_kanban"/>
+            <field name="context">{"search_default_group_by_template": 1}</field>
+            <field name="search_view_id" ref="search_approve_type"/>
+        </record>
+
+    </data>
+</odoo>

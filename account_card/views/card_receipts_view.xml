@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="account_card_receipts_view_tree" model="ir.ui.view">
+        <field name="name">Card receipts list</field>
+        <field name="model">account.card.receipts</field>
+        <field name="arch" type="xml">
+            <tree decoration-muted="expense_state=='exported'" default_order="expense_state desc">
+                <header>
+                     <button name="%(create_expense_form_wizard)d"
+                             class="btn-primary"
+                             type="action"
+                             string="Create Expense Report"/>
+<!--                    <button name="%(receipts_import_wizard_action)d"-->
+<!--                             class="btn-primary"-->
+<!--                             type="action"-->
+<!--                             string="Import Expense Report"-->
+<!--                            attrs="{'always_visible': True}"/>-->
+                    <button name="action_import_receipt_item" class="oe_highlight"  type="object" string="Import receipt"
+                                attrs="{'always_visible': True}"/>
+
+                </header>
+                <field name="card_type"/>
+                <field name="approve_datetime"/>
+                <field name="store_id" string="Store name" />
+                <field name="remark" />
+                <field name="card_no"  invisible="1"/>
+                <field name="foreign_currency_id" invisible="1" optional="hidden" groups="base.group_multi_currency"/>
+                <field name="total" />
+                <field name="expense_state" widget="badge" decoration-success="expense_state == 'exported'"  decoration-info="expense_state == 'waiting'"/>
+                <field name="purpose"/>
+                <field name="approve_no" optional="hide"/>
+                <field name="seq" invisible="1"/>
+                <field name="sply_amount" optional="hide"/>
+                <field name="vat_amount" optional="hide"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="account_card_receipts_search" model="ir.ui.view">
+            <field name="name">Account Card Receipts</field>
+            <field name="model">account.card.receipts</field>
+            <field name="arch" type="xml">
+                <search string="Search">
+                    <filter string="7 Days" name="bank_search" context="{}" domain="[('date','&gt;',((context_today() + datetime.timedelta(days=-7)).strftime('%Y-%m-%d')))]"></filter>
+                    <filter string="15 Days" name="bank_search_15" context="{}" domain="[('date','&gt;',((context_today() + datetime.timedelta(days=-15)).strftime('%Y-%m-%d')))]"></filter>
+                    <filter string="30 Days" name="bank_search_30" context="{}" domain="[('date','&gt;',((context_today() + datetime.timedelta(days=-30)).strftime('%Y-%m-%d')))]"></filter>
+                    <filter string="Unreported" name="unreported" context="{}" domain="[('expense_state','=', 'waiting')]"></filter>
+                    <filter string="12 Month" name="month_search_12" context="{}" domain="[('date','&gt;',((context_today() +  relativedelta(days=-365)).strftime('%Y-%m-%d')))]"></filter>
+                    <filter string="Date" name="month" context="{'group_by':'date:month'}"/>
+                 </search>
+            </field>
+    </record>
+
+    <record id="account_card_receipts_view_form" model="ir.ui.view">
+        <field name="name">Receipt detail</field>
+        <field name="model">account.card.receipts</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <field name="expense_state" widget="statusbar" statusbar_visible="waiting,exported"/>
+                </header>
+                <sheet>
+                     <div class="oe_button_box" name="button_box">
+                         <button name="move_import_expense" class="oe_stat_button" icon="fa-file-text-o" type="object" string="Expense"/>
+                     </div>
+                    <group string="Information" name="information">
+                        <group>
+                            <field name="product_id" invisible="1"></field>
+                            <field name="name" invisible="1"/>
+                            <field name="date" invisible="1"/>
+                            <field name="company_id" invisible="1"/>
+                            <field name="bank_code" string="Bank name" readonly="1"/>
+                            <field name="card_no_code" string="Card number" readonly="1"/>
+                            <field name="card_no" string="Card number" invisible="1"/>
+                            <field name="store_id" string="Store name" readonly="1"/>
+                            <field name="approve_datetime" sring="Approve date" readonly="1"/>
+                        </group>
+                        <group>
+                            <field name="approve_no" string="Approve number" readonly="1"/>
+                            <field name="card_type" string="Card type" readonly="1"/>
+                            <field name="approve_can" string="Approve ?" readonly="1"/>
+                            <field name="cancel_date" string="Cancel date" attrs="{'invisible': [('approve_can', '!=', 'canceled')]}" readonly="1"/>
+                        </group>
+                    </group>
+
+                    <group string="Amount" name="Amount">
+                        <group>
+                            <field name="foreign_currency_id" invisible="1" optional="hidden" groups="base.group_multi_currency" readonly="1"/>
+                            <field name="total" readonly="1" />
+                            <field name="sply_amount" readonly="1"/>
+                        </group>
+                        <group>
+                            <field name="vat_amount" readonly="1"/>
+                        </group>
+                    </group>
+                    <group string="Other info" name="other_info">
+                        <group>
+                            <field name="purpose"/>
+                            <field name="employee_id"/>
+                        </group>
+                        <group>
+                            <field name="remark"/>
+                        </group>
+                    </group>
+                    <group string="Store detail" name="store_detail">
+                        <group>
+                            <field name="store_repre_name" readonly="1"/>
+                            <field name="store_tele_number" readonly="1"/>
+                            <field name="store_address" readonly="1"/>
+                        </group>
+                    </group>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="message_ids"/>
+                </div>
+
+            </form>
+        </field>
+    </record>
+
+
+    <record id="move_card_receipts_list" model="ir.actions.act_window">
+        <field name="name">Move Account Card Receipts List</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">account.card.receipts</field>
+        <field name="view_mode">tree,form</field>
+        <field name="context">{"search_default_month_search_12":1} </field>
+    </record>
+
+
+<!--     <menuitem name="Account Configuration" id="account_card_menu" action="move_card_list" parent="account.menu_finance"/>-->
+
+<!--     <menuitem id="action_account_card_receipts_form_menu" name="Card Receipt"-->
+<!--           action="move_card_receipts_list" parent="account.menu_finance_configuration" sequence="0"/>-->
+
+
+       <record id="res_config_settings_view_form" model="ir.ui.view">
+            <field name="name">res.config.settings.view.form.inherit.hr.expense</field>
+            <field name="model">res.config.settings</field>
+            <field name="priority" eval="85"/>
+            <field name="inherit_id" ref="base.res_config_settings_view_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//div[@data-key='hr_expense']" position="inside">
+                    <h2>Credit Card</h2>
+                    <div class="row mt16 o_settings_container" name="etax_setting_container">
+                        <div id="kr_pb_bank_parameter" class="col-12 col-lg-6 o_setting_box">
+                            <field name="product_id" domain="[('can_be_expensed' ,'=', 'True')]"/>
+                            <div class="o_setting_right_pane">
+                                <span class="o_form_label">Default Expense Product</span>
+                                <div class="text-muted">
+                                    Set the value to be entered by default in the expense category value
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </xpath>
+            </field>
+        </record>
+
+       <record id="hr_expense_inherit_form" model="ir.ui.view">
+            <field name="name">hr.expense.move.inherit</field>
+            <field name="model">hr.expense</field>
+            <field name="inherit_id" ref="hr_expense.hr_expense_view_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//div[hasclass('oe_button_box')]" position="inside">
+                    <button name="move_receipt" class="oe_stat_button" icon="fa-file-text-o" type="object" string="Move Report" />
+                </xpath>
+            </field>
+        </record>
+
+    <menuitem name="Card" id="card_menu_action" parent="account.menu_finance_entries" sequence="13"/>
+    <menuitem name="Card Receipt" id="menu_child_action" parent="card_menu_action" action="move_card_receipts_list"/>
+
+
+</odoo>

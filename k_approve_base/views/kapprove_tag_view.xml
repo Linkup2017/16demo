@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <data>
+        <record id="kapproval_tags_action" model="ir.actions.act_window">
+            <field name="name">Tags</field>
+            <field name="res_model">kapprove.doc.tag</field>
+            <field name="view_mode">tree</field>
+            <field name="domain">[]</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">Create The First Tag
+                </p>
+            </field>
+        </record>
+        <record id="id_k_approval_tags_tree_view" model="ir.ui.view">
+            <field name="name">k_approval.tags.view.tree</field>
+            <field name="model">kapprove.doc.tag</field>
+            <field name="arch" type="xml">
+                <tree string="Tags" editable="bottom">
+                    <field name="name"/>
+                    <field name="color" widget="color_picker"/>
+                </tree>
+            </field>
+        </record>
+
+        <menuitem id="k_approval_tags" sequence="5" name="Tags" parent="menu_approval_config"
+                  action="kapproval_tags_action"/>
+
+
+    </data>
+</odoo>

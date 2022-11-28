@@ -1,0 +1,309 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <data>
+        <record id="id_k_approval_doc_tree_view" model="ir.ui.view">
+            <field name="name">k_approval.request.view.tree</field>
+            <field name="model">kapprove.doc</field>
+            <field name="arch" type="xml">
+                <tree js_class="docopen_tree" create = "0" default_order="create_on desc">
+                    <field name="name" string="Number"/>
+                    <field name="doc_name"/>
+                    <field name="user_id"/>
+                    <field name="create_on"/>
+                    <field name="tag_ids" widget="many2many_tags" options="{'color_field': 'color'}"/>
+                    <field name="state" decoration-success="state == 'submit' or state == 'in_progress'"
+                           decoration-danger="state == 'refused'" widget="badge" optional="show"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="kapprove_doc_search" model="ir.ui.view">
+            <field name="name">kapprove.doc.search</field>
+            <field name="model">kapprove.doc</field>
+            <field name="arch" type="xml">
+                <search string="Categories">
+                    <filter string="Archived" name="inactive" domain="[('active','=',False)]"/>
+                    <searchpanel>
+                        <field name="approval_state" string="Approval State" icon="fa-folder-open"
+                               enable_counters="1" expand = "1"/>
+                        <field name="checked_state" string="Checked State" icon="fa-folder-open"
+                               enable_counters="1" expand = "1" />
+                        <field name="mine_state" string="My document" icon="fa-inbox" enable_counters="1" expand = "1"/>
+                        <field name="tag_ids" select="multi" icon="fa-tag" enable_counters="1"/>
+                    </searchpanel>
+                </search>
+            </field>
+        </record>
+        <record id="id_k_approval_doc_form_view" model="ir.ui.view">
+            <field name="name">kapprove.doc.view.form</field>
+            <field name="model">kapprove.doc</field>
+            <field name="priority" eval="0"/>
+            <field name="arch" type="xml">
+                <form>
+                    <header>
+                        <button name="action_check" string="CHECK" type="object" class="btn-success"
+                                attrs="{'invisible': ['|', ('doc_check','=',True), ('state', 'in', ['draft', 'submit', 'in_progress', 'refused', 'cancel'])]}"/>
+                        <button name="action_approve" string="APPROVE" type="object" class="btn-success"
+                                attrs="{'invisible': ['|',('current_approver','=',False),('state', 'in', ['draft', 'refused', 'cancel'])]}"/>
+                        <button name="action_refuse" string="REFUSE" type="object" class="btn-danger"
+                                attrs="{'invisible':['|',('current_approver','=',False),('state', 'in', ['draft', 'refused', 'cancel'])]}"/>
+
+                        <button name="action_submit" string="SUBMIT" type="object" class="oe_highlight"
+                                confirm="Do you want to Submit Document?"
+                                attrs="{'invisible': [('state', 'not in', ['draft'])]}"/>
+                        <widget name="attach_document" action="message_post" string="ATTACH DOCUMENT" highlight="1"
+                                attrs="{'invisible': [('state', 'not in', ['draft'])]}"/>
+
+                        <!--<button name="action_template" string="TEMPLATE" type="object" class="oe_highlight"
+                                attrs="{'invisible': [('state', 'not in', ['draft'])]}"/>-->
+                        <button name="action_cancel" string="CANCEL" type="object"
+                                attrs="{'invisible': ['|', ('state', 'not in', ['draft', 'submit']), ('current_user', '!=', True)]}"/>
+
+                        <field name="state" widget="statusbar" readonly="1"/>
+                    </header>
+                    <sheet>
+                        <widget name="web_ribbon" title="Archived" bg_color="bg-danger"
+                                attrs="{'invisible': [('active', '=', True)]}"/>
+
+                        <group>
+                            <div class="oe_title">
+                                <h2>
+                                    <field name="doc_name" attrs="{'readonly': [('state','not in',('draft'))]}"/>
+                                </h2>
+                            </div>
+                        </group>
+
+                        <field name="currency_id" invisible="1"/>
+                        <field name="has_date" invisible="1"/>
+                        <field name="has_period" invisible="1"/>
+                        <field name="has_quantity" invisible="1"/>
+                        <field name="has_amount" invisible="1"/>
+                        <field name="has_reference" invisible="1"/>
+                        <field name="has_partner" invisible="1"/>
+                        <field name="has_payment_method" invisible="1"/>
+                        <field name="has_location" invisible="1"/>
+                        <field name="has_product" invisible="1"/>
+                        <field name="has_partners" invisible="1"/>
+                        <field name="has_description" invisible="1"/>
+                        <field name="has_totalamount" invisible="1"/>
+                        <field name="has_purpose" invisible="1"/>
+
+                        <field name="number_has_partner" string=" number_has_partner" invisible = "1"/>
+                        <field name="number_has_date" string="number_has_date" invisible = "1"/>
+                        <field name="number_has_period" string="number_has_period" invisible = "1"/>
+                        <field name="number_has_product" string="number_has_product" invisible = "1"/>
+                        <field name="number_has_quantity" string="number_has_quantity" invisible = "1"/>
+                        <field name="number_has_amount" string="number_has_amount" invisible = "1"/>
+                        <field name="number_has_reference" string="number_has_reference" invisible = "1" />
+                        <field name="number_has_payment_method" string="number_has_payment_method" invisible = "1"/>
+                        <field name="number_has_location" string="number_has_location" invisible = "1"/>
+                        <field name="number_has_partners" string=" number_has_partner" invisible = "1"/>
+                        <field name="number_has_description" string=" number_has_description" invisible = "1"/>
+                        <field name="number_has_totalamount" string=" number_has_totalamount" invisible = "1"/>
+                        <field name="number_has_purpose" string=" number_has_purpose" invisible = "1"/>
+
+                        <field name="str_has_partner" string="str_has_partner" invisible = "1"/>
+                        <field name="str_has_date" string="str_has_date" invisible = "1"/>
+                        <field name="str_has_period" string="str_has_period" invisible = "1"/>
+                        <field name="str_has_product" string="str_has_product" invisible = "1"/>
+                        <field name="str_has_quantity" string="str_has_quantity" invisible = "1"/>
+                        <field name="str_has_amount" string="str_has_amount" invisible = "1"/>
+                        <field name="str_has_reference" string="str_has_reference" invisible = "1" />
+                        <field name="str_has_payment_method" string="str_has_payment_method" invisible = "1"/>
+                        <field name="str_has_location" string="str_has_location" invisible = "1"/>
+                        <field name="str_has_partners" string="str_has_partner" invisible = "1"/>
+                        <field name="str_has_description" string="str_has_description" invisible = "1"/>
+                        <field name="str_has_totalamount" string="str_has_totalamount" invisible = "1"/>
+                        <field name="str_has_purpose" string="str_has_purpose" invisible = "1"/>
+
+                        <field name="side_has_partner" string="str_has_partner" invisible = "1"/>
+                        <field name="side_has_date" string="str_has_date" invisible = "1"/>
+                        <field name="side_has_period" string="str_has_period" invisible = "1"/>
+                        <field name="side_has_product" string="str_has_product" invisible = "1"/>
+                        <field name="side_has_quantity" string="str_has_quantity" invisible = "1"/>
+                        <field name="side_has_amount" string="str_has_amount" invisible = "1"/>
+                        <field name="side_has_reference" string="str_has_reference" invisible = "1" />
+                        <field name="side_has_payment_method" string="str_has_payment_method" invisible = "1"/>
+                        <field name="side_has_location" string="str_has_location" invisible = "1"/>
+                        <field name="side_has_partners" string="str_has_partner" invisible = "1"/>
+                        <field name="side_has_description" string="str_has_description" invisible = "1"/>
+                        <field name="side_has_totalamount" string="str_has_totalamount" invisible = "1"/>
+                        <field name="side_has_purpose" string="side_has_purpose" invisible = "1"/>
+                        <field name="template_id" invisible="1"/>
+
+                        <field name="quantity" invisible = "1" />
+                        <field name="amount" invisible = "1" />
+                        <field name="company_id" invisible="1"/>
+                        <field name="description" invisible = "1" />
+
+                        <group class = "linkup-main">
+                             <group name="request_main" class = "linkup-main">
+                                <field name="date" attrs="{'invisible':['|',('has_date','==','no'),('side_has_date','==','right')], 'required': [('side_has_date','==','left'),('has_date','==','required')], 'readonly': [('state','not in',('draft'))]}"/>
+
+                                <label for="date_start" string="Period" attrs="{'invisible':['|',('has_period','==','no'),('side_has_period','==','right')]}"/>
+                                <div attrs="{'invisible':['|',('has_period','==','no'),('side_has_period','==','right')]}">
+                                    <div>
+                                      <span>From: </span><field name="date_start" class="oe_inline" attrs="{'required': [('side_has_period','==','left'),('has_period','==','required')], 'readonly': [('state','not in',('draft'))]}"/>
+                                    </div>
+                                    <div>
+                                      <span>to: </span><field name="date_end" class="oe_inline" attrs="{'required': [('side_has_period','==','left'),('has_period','==','required')], 'readonly': [('state','not in',('draft'))]}"/>
+                                    </div>
+                                </div>
+                                <field name="location" attrs="{'invisible':['|',('has_location','==','no'),('side_has_location','==','right')], 'required': [('side_has_location','==','left'),('has_location','==','required')], 'readonly': [('state','not in',('draft'))]}"/>
+                                <field name="partner_id" attrs="{'invisible':['|',('has_partner','==','no'),('side_has_partner','==','right')], 'required': [('side_has_partner','==','left'),('has_partner','==','required')], 'readonly': [('state','not in',('draft'))]}"/>
+                                <field name="partner_ids" widget="many2many_tags" attrs="{'invisible':['|',('has_partners','==','no'),('side_has_partners','==','right')], 'required': [('side_has_partners','==','left'),('has_partners','==','required')], 'readonly': [('state','not in',('draft'))]}"/>
+                                <field name="reference" attrs="{'invisible':['|',('has_reference','==','no'),('side_has_reference','==','right')], 'required': [('side_has_reference','==','left'),('has_reference','==','required')], 'readonly': [('state','not in',('draft'))]}"/>
+                                <field name="totalamount" attrs="{'invisible':['|',('has_totalamount','==','no'),('side_has_totalamount','==','right')], 'required': [('side_has_totalamount','==','left'),('has_totalamount','==','required')], 'readonly': [('state','not in',('draft'))]}"/>
+                                <field name="purpose" attrs="{'invisible':['|',('has_purpose','==','no'),('side_has_purpose','==','right')], 'required': [('side_has_purpose','==','left'),('has_purpose','==','required')], 'readonly': [('state','not in',('draft'))]}"/>
+
+                            </group>
+
+                            <group name="request_details" class = "linkup-main">
+                                <field name="date" attrs="{'invisible':['|',('has_date','==','no'),('side_has_date','==','left')], 'required': [('side_has_date','==','right'),('has_date','==','required')], 'readonly': [('state','not in',('draft'))]}"/>
+
+                                <label for="date_start" string="Period" attrs="{'invisible':['|',('has_period','==','no'),('side_has_period','==','left')]}"/>
+                                <div attrs="{'invisible':['|',('has_period','==','no'),('side_has_period','==','left')]}">
+                                    <div>
+                                      <span>From: </span><field name="date_start" class="oe_inline" attrs="{'required': [('side_has_period','==','right'),('has_period','==','required')], 'readonly': [('state','not in',('draft'))]}"/>
+                                    </div>
+                                    <div>
+                                      <span>to: </span><field name="date_end" class="oe_inline" attrs="{'required': [('side_has_period','==','right'),('has_period','==','required')], 'readonly': [('state','not in',('draft'))]}"/>
+                                    </div>
+                                </div>
+                                <field name="location" attrs="{'invisible':['|',('has_location','==','no'),('side_has_location','==','left')], 'required': [('side_has_location','==','right'),('has_location','==','required')], 'readonly': [('state','not in',('draft'))]}"/>
+                                <field name="partner_id" attrs="{'invisible':['|',('has_partner','==','no'),('side_has_partner','==','left')], 'required': [('side_has_partner','==','right'),('has_partner','==','required')], 'readonly': [('state','not in',('draft'))]}"/>
+                                <field name="partner_ids" widget="many2many_tags" attrs="{'invisible':['|',('has_partners','==','no'),('side_has_partners','==','left')], 'required': [('side_has_partners','==','right'),('has_partners','==','required')], 'readonly': [('state','not in',('draft'))]}"/>
+                                <field name="reference" attrs="{'invisible':['|',('has_reference','==','no'),('side_has_reference','==','left')], 'required': [('side_has_reference','==','right'),('has_reference','==','required')], 'readonly': [('state','not in',('draft'))]}"/>
+                                <field name="totalamount" attrs="{'invisible':['|',('has_totalamount','==','no'),('side_has_totalamount','==','left')], 'required': [('side_has_totalamount','==','right'),('has_totalamount','==','required')], 'readonly': [('state','not in',('draft'))]}"/>
+                                <field name="purpose" attrs="{'invisible':['|',('has_purpose','==','no'),('side_has_purpose','==','left')], 'required': [('side_has_purpose','==','right'),('has_purpose','==','required')], 'readonly': [('state','not in',('draft'))]}"/>
+
+                            </group>
+                        </group>
+
+                        <group class = "linkup-sub">
+                            <field name="bigo" string = "내용" widget="html" attrs="{'readonly': [('state','not in',['draft'])]}"/>
+                        </group>
+
+                        <notebook>
+                            <page string="Products" name="products"
+                                attrs="{'invisible': [('has_product', '=', 'no')]}">
+                                <field name="product_line_ids"
+                                    context="{'tree_view_ref': 'k_approve_base.approval_product_line_view_tree'}"
+                                    attrs="{'readonly': [('state','not in',['draft'])]}"/>
+                            </page>
+
+                            <page string="Information" name="info">
+                                <group>
+                                    <field name="period" attrs="{'readonly': [('state','not in',['draft'])]}"/>
+                                    <field name="secret" attrs="{'readonly': [('state','not in',['draft'])]}"/>
+                                    <field name="priority" attrs="{'readonly': [('state','not in',['draft'])]}" widget="priority"/>
+                                    <field name="my_approver_line_id" attrs="{'readonly': [('state','not in',['draft'])]}"/>
+                                    <field name="active" invisible="1"
+                                           attrs="{'readonly': [('state','not in',['draft'])]}"/>
+                                    <field name="submit_user_id" widget="many2many_tags" attrs="{'invisible': [('submit_user_id','=',[])]}"/>
+                                    <field name="current_approver" invisible="1"/>
+                                    <field name="current_user" invisible="1"/>
+                                    <field name="doc_check" invisible="1"/>
+                                </group>
+                                <group>
+                                    <field name="user_id"/>
+                                    <field name="create_on"/>
+                                 <!--   <field name="categ_id" attrs="{'readonly': [('state','not in',['draft'])]}"/>-->
+                                    <field name="tag_ids" widget="many2many_tags" options="{'color_field': 'color'}"
+                                           attrs="{'readonly': [('state','not in',['draft'])]}"/>
+                                    <field name="origin" attrs="{'invisible': [('origin', '=', False)]}"/>
+                                    <field name="submit_date" attrs="{'invisible': [('submit_date', '=', False)]}"/>
+                                    <field name="approve_date" attrs="{'invisible': [('approve_date', '=', False)]}"/>
+                                    <field name="users" widget="many2many_tags" invisible="1"
+                                           attrs="{'readonly': [('state','not in',['draft'])]}"/>
+                                    <field name="cooperation_users" string="Cooperation Users" widget="many2many_tags"
+                                           invisible="1"/>
+                                </group>
+                            </page>
+                            <page string="Approver(s)" name="approvers">
+                                <field name="approver_ids" attrs="{'readonly': [('state','not in',['draft'])]}">
+                                    <tree string="Approvers" editable="bottom">
+                                        <field name="sequence" widget="handle"/>
+                                        <field name="user_id"
+                                               domain="['&amp;', ('id', 'not in', parent.users), ('id', '!=', uid)]"/>
+                                        <field name="approve_type"/>
+                                        <field name="department_id"/>
+                                        <field name="job_title"/>
+                                        <field name="job_position"/>
+                                        <field name="state"/>
+                                        <field name="date"/>
+                                    </tree>
+                                </field>
+                                <group>
+                                    <group>
+                                        <field name="user_ids" widget="many2many_tags" string="Cooperation"
+                                               domain="[('id', '!=', uid)]"
+                                               attrs="{'readonly': [('state','not in',['draft'])]}"/>
+                                    </group>
+                                </group>
+                            </page>
+                            <page string="Cooperation" name="cooperation"
+                                  attrs="{'invisible': [('state', 'in', ['draft', 'submit', 'in_progress', 'refused', 'cancel'])]}">
+                                <field name="cooperation_ids" attrs="{'readonly': [('state','not in',['draft'])]}">
+                                    <tree string="Cooperation" editable="bottom">
+                                        <field name="user_id"
+                                               domain="['&amp;', ('id', 'not in', parent.cooperation_users), ('id', '!=', uid)]"/>
+                                        <field name="department_id"/>
+                                        <field name="job_title"/>
+                                        <field name="job_position"/>
+                                        <field name="checked_date"/>
+                                        <field name="is_checked"/>
+                                    </tree>
+                                </field>
+
+                            </page>
+
+                        </notebook>
+
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+
+        <record id="action_kapproval_doc" model="ir.actions.act_window">
+            <field name="name">Dashboard</field>
+            <field name="res_model">kapprove.doc</field>
+            <field name="view_mode">tree,form</field>
+            <field name="search_view_id" ref="kapprove_doc_search"/>
+            <field name="view_ids" eval="[(5, 0, 0),
+                (0, 0, {'view_mode': 'tree', 'view_id': ref('id_k_approval_doc_tree_view')}),
+                (0, 0, {'view_mode': 'form', 'view_id': ref('id_k_approval_doc_form_view')})]"/>
+        </record>
+
+
+
+
+<!--        <menuitem id="menu_dashboard" name="Dashboard" sequence="1" parent="menu_kapproval"-->
+<!--                  action="action_kapproval_doc"/>-->
+
+        <record id="wizard_employee_info_excel_report_form_view" model="ir.ui.view">
+            <field name="name">wizard.employee.info.excel.report.form.view</field>
+            <field name="model">wizard.emp.info.excel.report</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <group>
+                            <field name="name" invisible="1"/>
+                            <h1>
+                                <field name="report" filename="name"/>
+                            </h1>
+                        </group>
+                        <footer>
+                            <button special="cancel" string="Cancel" class="oe_link"/>
+                        </footer>
+                    </sheet>
+                </form>
+            </field>
+         </record>
+    </data>
+</odoo>

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="receipts_import_wizard_form" model="ir.ui.view">
+        <field name='name'>receipts_import_wizard_form</field>
+        <field name='model'>receipts.import.wizard</field>
+        <field name='arch' type='xml'>
+            <form string='Import'>
+                <sheet>
+                    <div class="oe_title">
+                        <h1>Import할 excel 파일을 선택해 주세요</h1>
+                    </div>
+                    <group >
+                           <field name="xls_file" />
+                           <field name="account_card_id" invisible="1"/>
+                           <field name="receipts_id" invisible="1"/>
+                    </group>
+                </sheet>
+                <footer>
+                    <button string="OK" type="object" name="action_import" class="btn-primary"/>
+                    <button string="Discard" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+
+    <record id="receipts_import_wizard_action" model="ir.actions.act_window">
+          <field name="name">Import Account Card Receipts List</field>
+          <field name="type">ir.actions.act_window</field>
+          <field name="res_model">receipts.import.wizard</field>
+          <field name="view_mode">form</field>
+          <field name="view_id" ref="receipts_import_wizard_form"/>
+          <field name="target">new</field>
+    </record>
+
+</odoo>

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record model="ir.module.category" id="kapproval_module_category">
+        <field name="name">Approvals</field>
+        <field name="description">Helps you manage your approvals.</field>
+        <field name="parent_id"/>
+        <field name="sequence">9</field>
+    </record>
+
+    <record id="kapproval_group_user" model="res.groups">
+        <field name="name">Approver</field>
+        <field name="category_id" ref="kapproval_module_category"/>
+        <field name="implied_ids" eval="[(6, 0, [ref('base.group_user')])]"/>
+    </record>
+
+    <record id="kapproval_group_manager" model="res.groups">
+        <field name="name">Administrator</field>
+        <field name="category_id" ref="kapproval_module_category"/>
+        <field name="implied_ids" eval="[(4, ref('kapproval_group_user'))]"/>
+    </record>
+</odoo>

@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <data>
+        <record id="id_k_approval_doc_line_tree_view" model="ir.ui.view">
+            <field name="name">kapproval.request.line.view.tree</field>
+            <field name="model">kapprove.doc.line</field>
+            <field name="arch" type="xml">
+                <tree js_class="docopen_tree" create = "0" default_order="create_on desc">
+                    <field name="approve_doc_id" invisible="1"/>
+                    <field name="name" string="Number"/>
+                    <field name="doc_name"/>
+                    <field name="user_id"/>
+                    <field name="create_on"/>
+                    <field name="tag_ids" widget="many2many_tags" options="{'color_field': 'color'}"/>
+                    <field name="state" decoration-success="state == 'submit' or state == 'in_progress'"
+                           decoration-danger="state == 'refused'" widget="badge" optional="show"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="kapprove_doc_line_search" model="ir.ui.view">
+            <field name="name">kapprove.doc.line.search</field>
+            <field name="model">kapprove.doc.line</field>
+            <field name="arch" type="xml">
+                <search string="Categories">
+                    <filter string="Archived" name="inactive" domain="[('active','=',False)]"/>
+                    <searchpanel>
+                        <field name="approval_state" string="Approval State" icon="fa-folder-open"
+                               enable_counters="1" expand = "1"/>
+                        <field name="checked_state" string="Checked State" icon="fa-folder-open"
+                               enable_counters="1" expand = "1" />
+                        <field name="mine_state" string="My document" icon="fa-inbox" enable_counters="1" expand = "1"/>
+                        <field name="tag_ids" select="multi" icon="fa-tag" enable_counters="1"/>
+                    </searchpanel>
+                </search>
+            </field>
+        </record>
+
+        <record id="id_k_approval_doc_line_form_view" model="ir.ui.view">
+            <field name="name">kapprove.doc.line.view.form</field>
+            <field name="model">kapprove.doc.line</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <group>
+                            <div class="oe_title">
+                                <h2>
+                                    <field name="doc_name" />
+                                </h2>
+                            </div>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_kapproval_doc_line" model="ir.actions.act_window">
+            <field name="name">Dashboard</field>
+            <field name="res_model">kapprove.doc.line</field>
+            <field name="view_mode">tree,form</field>
+            <field name="search_view_id" ref="kapprove_doc_line_search"/>
+            <field name="domain">[('approver_id','=',uid)]</field>
+            <field name="view_ids" eval="[(5, 0, 0),
+                (0, 0, {'view_mode': 'tree', 'view_id': ref('id_k_approval_doc_line_tree_view')}),
+                (0, 0, {'view_mode': 'form', 'view_id': ref('id_k_approval_doc_line_form_view')})]"/>
+        </record>
+
+        <menuitem id="menu_dashboard_line" name="Dashboard" sequence="1" parent="menu_kapproval"
+                  action="action_kapproval_doc_line"/>
+
+    </data>
+</odoo>

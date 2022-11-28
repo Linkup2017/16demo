@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="payment_provider_form" model="ir.ui.view">
+        <field name="name">INIcis Provider Form</field>
+        <field name="model">payment.provider</field>
+        <field name="inherit_id" ref="payment.payment_provider_form"/>
+        <field name="arch" type="xml">
+            <group name="provider_credentials" position='inside'>
+                <group attrs="{'invisible': [('code', '!=', 'inicis')]}">
+                    <field name="inicis_mid" string="MID"
+                           attrs="{'required': [('code', '=', 'inicis'), ('state', '!=', 'disabled')]}"/>
+                    <field name="inicis_mid_key" string="INIAPIKey"
+                           attrs="{'required': [('code', '=', 'inicis'), ('state', '!=', 'disabled')]}"
+                           password="True"/>
+                    <field name="inicis_sign_key" string="Sign Key"
+                           attrs="{'required': [('code', '=', 'inicis'), ('state', '!=', 'disabled')]}"
+                           password="True"/>
+                </group>
+            </group>
+        </field>
+    </record>
+</odoo>

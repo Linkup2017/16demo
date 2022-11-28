@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <data>
+        <record id="view_kapprove_refuse_wizard" model="ir.ui.view">
+            <field name="name">kapprove.refuse.wizard.view</field>
+            <field name="model">kapprove.refuse.wizard</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form>
+                    <group>
+                        <field name="password" password="True" attrs="{'invisible': [('secret', '=', False)],'required':[('secret','=',True)]}"/>
+                        <field name="comment"/>
+                        <field name="secret" attrs="{'required':[('secret','=',True)]}" invisible="1"/>
+                    </group>
+                    <footer>
+                        <button name="action_submit" string="OK" type="object" class="oe_highlight"/>
+                        <button string="Cancel" class="btn btn-default" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+    </data>
+</odoo>

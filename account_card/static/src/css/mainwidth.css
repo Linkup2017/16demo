@@ -1,0 +1,30 @@
+.o_form_view .o_form_label {
+    margin: 0 5px 0 0;
+    color: #212529;
+    font-size: 1.08333333rem;
+    font-weight: 700;
+}
+
+
+body {
+    margin: 0;
+    font-family: "Odoo Unicode Support Noto", "Lucida Grande", Helvetica, Verdana, Arial, sans-serif;
+    font-size: 1.08333333rem;
+    font-weight: 400;
+    color: #495057;
+    text-align: left;
+    background-color: #f0eeee;
+}
+
+
+.o_form_view .o_group.o_inner_group > tbody > tr > td.o_td_label {
+    width: 0%;
+    padding: 0 15px 0 0;
+    min-width: 150px;
+    color: #212529;
+}
+
+.o_form_view .o_td_label .o_form_label:not(.o_status), .o_form_view .o_checkbox_optional_field > .o_form_label {
+    min-height: 1px;
+}
+

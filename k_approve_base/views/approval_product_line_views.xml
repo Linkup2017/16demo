@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="kapproval_product_line_view_tree" model="ir.ui.view">
+        <field name="name">kapproval.product.line.view.tree</field>
+        <field name="model">kapproval.product.line</field>
+        <field name="arch" type="xml">
+            <tree editable="bottom" string="Products">
+                <field name="company_id" invisible="1"/>
+                <field name="str_has_product" invisible="1"/>
+                <field name="str_has_quantity" invisible="1"/>
+                <field name="str_has_amount" invisible="1"/>
+                <field name="str_has_reference" invisible="1"/>
+
+                <field name="product_id"  attrs="{'required': [('parent.has_product', '=', 'required')]}"/>
+                <field name="description" attrs="{
+                    'column_invisible': [('parent.has_description', '=', 'no')],
+                    'required': [('parent.has_description', '=', 'required')],
+                    }"/>
+                <field name="quantity" attrs="{
+                    'column_invisible': [('parent.has_quantity', '=', 'no')],
+                    'required': [('parent.has_quantity', '=', 'required')],
+                    }"/>
+                <field name="product_uom_id" groups="uom.group_uom"
+                    options="{'no_create': True, 'no_open': True}"/>
+                <field name="product_uom_category_id" invisible="1"/>
+                <field name="amount"  attrs="{
+                    'column_invisible': [('parent.has_amount', '=', 'no')],
+                    'required': [('parent.has_amount', '=', 'required')],
+                    }"/>
+
+            </tree>
+        </field>
+    </record>
+
+    <record id="kapproval_product_line_view_form" model="ir.ui.view">
+        <field name="name">kapproval.product.line.view.form</field>
+        <field name="model">kapproval.product.line</field>
+        <field name="arch" type="xml">
+            <form string="Products">
+                <sheet>
+                    <group>
+                        <field name="company_id" invisible="1"/>
+                        <field name="product_id"/>
+                        <field name="description"/>
+                        <field name="quantity"/>
+                        <field name="amount"/>
+                        <field name="product_uom_id" groups="uom.group_uom"/>
+                        <field name="product_uom_category_id" invisible="1"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+</odoo>
